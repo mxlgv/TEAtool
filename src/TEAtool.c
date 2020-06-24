@@ -35,7 +35,7 @@ void xxcrypt_file(char *in_file, char* out_file, char arg)
     output = fopen(out_file,"wb");
     if((input = fopen(in_file,"rb"))==NULL) 
     {
-        printf("File '%s' not found\n!", out_file);
+        printf("File '%s' not found\n!", in_file);
         exit(1);
     }
     else
@@ -79,7 +79,7 @@ void xxcrypt_file(char *in_file, char* out_file, char arg)
 
 
 
-void str_to_strkey(char str[32], char str_key[4][9])
+void str_to_strkey(char *str, char str_key[4][9])
 {
     int count=0;
     for(int i=0; i<4; i++)
@@ -94,34 +94,24 @@ void str_to_strkey(char str[32], char str_key[4][9])
     }
 }
 
-int valid_key(char str[32])
+int valid_key(char *str)
 {
-    char hex[22]={'a','b','c','d','e','f', 'A','B','C','D','E','F','0','1','2','3','4','5','6','7','8','9'};
     int count=0;
+    char hex[]={"abcdefABCDEF0123456789"};
+    int *p;
     for(int i=0; i<32; i++)
-    {
-        for(int j=0; j<22; j++)
+    { 
+        if(strchr(hex,str[i])!=NULL)
         {
-            if(str[i]==hex[j])
-            {
-                count++;
-                break;    
-            }            
-        }
-    }
-
-    if(count==32)
-    {
-        return 1;
-    }
-    else
-    {
-        return 0;
-    }
+            count++;
+        }       
+     }
+     if(count==32){return 1;}
+     else{ return 0;}
 }
 
 
-void key_con_read(char str[32])
+void key_con_read(char *str)
 {
     char str_key[4][9];
     if(valid_key(str))
