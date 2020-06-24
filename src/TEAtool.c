@@ -114,7 +114,7 @@ int valid_key(char *str)
 void key_con_read(char *str)
 {
     char str_key[4][9];
-    if(valid_key(str))
+    if(valid_key(str) && (32==strlen(str)))
     {
         for(int i=0; i<4; i++)
         {
@@ -219,7 +219,7 @@ int main(int argc, char **argv)
    
    else if(argc==2 && !strcmp(argv[1],"-h"))
    {
-       printf("Usage: \nTEAtool [infile] [outfile] [arguments]\n\nArguments: \n-e  Encrypt file\n-d  Decrypt file\n-k  [128-key in hexadecimal format]\n-K  [File key]\n-h  This reference\n-a  bout the program \n");
+       printf("Usage: \nTEAtool [infile] [outfile] [arguments]\n\nArguments: \n-e  Encrypt file\n-d  Decrypt file\n-k  [128bit-key in hex format]\n-K  [File key]\n-h  This reference\n-a  About the program \n");
        exit(0);
    }
    
