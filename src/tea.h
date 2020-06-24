@@ -59,5 +59,4 @@ void TEA_decrypt (uint32_t* block, uint32_t* key)
 
     block[0] = v0;
     block[1] = v1;
-    return block;
 } 
