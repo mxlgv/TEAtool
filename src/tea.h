@@ -1,3 +1,4 @@
+
 #include <stdint.h>
 
 void TEA_encrypt (uint32_t block[2], uint32_t key[4])
@@ -30,7 +31,7 @@ void TEA_encrypt (uint32_t block[2], uint32_t key[4])
     block[1] = v1;
 }
 
-uint32_t* TEA_decrypt (uint32_t* block, uint32_t* key)
+void TEA_decrypt (uint32_t* block, uint32_t* key)
 {
     /* set up */
     uint32_t v0 = block[0];
