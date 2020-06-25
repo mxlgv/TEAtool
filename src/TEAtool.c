@@ -4,8 +4,11 @@
 #include <stdint.h>
 #include <stdlib.h>
 
+
 #define ENCRYPT 1
 #define DECRYPT 2
+
+
 
 typedef unsigned char flag;
 uint32_t key[4];
@@ -29,7 +32,6 @@ long size_file(FILE* file)
 
 void xxcrypt_file(char *in_file, char* out_file, char arg)
 {
-    int i=1;
     uint32_t temp_block[2];
     FILE *input, *output;
     output = fopen(out_file,"wb");
@@ -106,7 +108,6 @@ int valid_key(char *str)
 {
     int count=0;
     char hex[]={"abcdefABCDEF0123456789"};
-    int *p;
     for(int i=0; i<32; i++)
     {
         if(strchr(hex,str[i])!=NULL)
@@ -130,8 +131,9 @@ void key_con_read(char *str)
             str_to_strkey(str, str_key);
             key[i]=(uint32_t)strtol(str_key[i],NULL,16);
         }
+        
     }
-
+   
     else
     {
         printf("Invalid key format!\n");
@@ -139,32 +141,18 @@ void key_con_read(char *str)
     }
 }
 
-
-int len_of_keyfile(FILE *keyfile)
-{
-    int i=0;
-    while (!feof(keyfile))
-    {
-        fgetc(keyfile);
-        i++;
-    }
-    return i-2;
-}
-
 void key_file_read(char *key_file)
 {
-    char temp_key[32];
     FILE *keyfile;
-    if((keyfile = fopen(key_file,"r"))==NULL)
+    if((keyfile = fopen(key_file,"rb"))==NULL)
     {
         printf("File '%s' not found!\n", key_file);
         exit(-1);
     }
     
-    if(len_of_keyfile(keyfile)==32)
+    if(size_file(keyfile)==16)
     {
-    fseek(keyfile,0,SEEK_SET);
-    fscanf(keyfile,"%s",&temp_key);
+    fread(key,sizeof(uint32_t),4, keyfile);
     }
     else
     {
@@ -173,9 +161,7 @@ void key_file_read(char *key_file)
     }
     
     fclose(keyfile);
-    key_con_read(temp_key);
 }
-
 
 
 void findopt(int argc, char *argv[],char *in_file, char *out_file)
@@ -219,7 +205,19 @@ void findopt(int argc, char *argv[],char *in_file, char *out_file)
     exit(0);
 }
 
+void key_write_in_file(char *keyfilename)
+{
+    FILE *keyfile;
+    if((keyfile = fopen(strcat(keyfilename, ".key"), "wb"))==NULL)
+    {
+        printf("Error! Incorrect file:'%s'\n", keyfilename);
+        exit(-1);
+    }
+    fwrite(key,sizeof(uint8_t), 16, keyfile);   
+    printf("The key is recorded in file: %s\n", keyfilename);
+    exit(0);
 
+}
 
 
 int main(int argc, char **argv)
@@ -234,7 +232,7 @@ int main(int argc, char **argv)
     printf("      )  (         TEAtool     \n");
     printf("     (   ) )                   \n");
     printf("      ) ( (        Version:    \n");
-    printf("    _______)_     1.4-fixed    \n");
+    printf("    _______)_      1.5-beta    \n");
     printf(" .-'---------|                 \n");
     printf("( C|/////////|      Author:    \n");
     printf(" '-./////////|   turbocat2001  \n");
@@ -247,8 +245,14 @@ int main(int argc, char **argv)
 
    else if(argc==2 && !strcmp(argv[1],"-h"))
    {
-       printf("Usage: \nTEAtool [infile] [outfile] [arguments]\n\nArguments: \n-e  Encrypt file\n-d  Decrypt file\n-k  [128bit-key in hex format]\n-K  [File key]\n-h  This reference\n-a  About the program \n");
+       printf("Usage: \nTEAtool [infile] [outfile] [arguments]\n\nArguments: \n -e  Encrypt file\n -d  Decrypt file\n -k [key]  128bit-key in hex format\n -K [keyfile]  Use key from file\n -r [key] [keyfile].key  Key entry to key file\n -h  This reference\n -a  About the program \n");
        exit(0);
+   }
+
+   else if(argc==4 && !strcmp(argv[1],"-r"))
+   {
+       key_con_read(argv[2]);
+       key_write_in_file(argv[3]);
    }
 
 
