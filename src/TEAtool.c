@@ -42,14 +42,18 @@ void xxcrypt_file(char *in_file, char* out_file, char arg)
     {
         long size_f=size_file(input);
         if(arg==ENCRYPT){
-            while(ftell(output)!=size_f){
-                if(2!=fread(&temp_block, sizeof(uint32_t), 2, input))
+            uint8_t mini_block[8][1];
+            while(ftell(output)<size_f)
+            {
+                memset(mini_block, 0x00, 8);
+                for(int i=0; i<8; i++)
                 {
-                    temp_block[0]=0x00000000;
-                    temp_block[1]=0x00000000;
+                    fread(mini_block[i], sizeof(uint8_t), 1, input);
                 }
+                memcpy(temp_block,mini_block,8);
                 TEA_encrypt(temp_block,key);
-                fwrite(temp_block, sizeof(uint32_t), 2, output);
+                fwrite(temp_block, sizeof(uint32_t),2, output);
+                
             }
             fclose(input);
             fclose(output);
@@ -58,22 +62,26 @@ void xxcrypt_file(char *in_file, char* out_file, char arg)
 
           }
           else if(arg==DECRYPT){
-            while(ftell(output)!=size_f){
-                if(2!=fread(&temp_block, sizeof(uint32_t), 2, input))
+            uint8_t mini_block[8][1];
+            while(ftell(output)<size_f)
+            {
+                memset(mini_block, 0x0, 8);
+                for(int i=0; i<8; i++)
                 {
-                    temp_block[0]=0x00000000;
-                    temp_block[1]=0x00000000;
+                    fread(mini_block[i], sizeof(uint8_t), 1, input);
                 }
+                memcpy(temp_block,mini_block,8);
                 TEA_decrypt(temp_block,key);
-                fwrite(temp_block, sizeof(uint32_t), 2, output);
-               }
+                fwrite(temp_block, sizeof(uint32_t),2, output);
             }
             fclose(input);
             fclose(output);
             printf("Data from file: %s successfully DECRYPTED to file: %s\n",in_file,out_file);
             exit(0);
-        }
-}
+            }
+    }    
+}      
+
 
 
 
@@ -132,6 +140,17 @@ void key_con_read(char *str)
 }
 
 
+int len_of_keyfile(FILE *keyfile)
+{
+    int i=0;
+    while (!feof(keyfile))
+    {
+        fgetc(keyfile);
+        i++;
+    }
+    return i-2;
+}
+
 void key_file_read(char *key_file)
 {
     char temp_key[32];
@@ -141,17 +160,18 @@ void key_file_read(char *key_file)
         printf("File '%s' not found!\n", key_file);
         exit(-1);
     }
-    for(int i=0; i<32; i++)
+    
+    if(len_of_keyfile(keyfile)==32)
     {
-        temp_key[i]=fgetc(keyfile);
+    fseek(keyfile,0,SEEK_SET);
+    fscanf(keyfile,"%s",&temp_key);
     }
-
-    if(!feof(keyfile))
+    else
     {
-      printf("Invalid key format!\n");
-      exit(-1);
+        printf("Invalid key format!\n");
+        exit(-1);
     }
-
+    
     fclose(keyfile);
     key_con_read(temp_key);
 }
@@ -214,7 +234,7 @@ int main(int argc, char **argv)
     printf("      )  (         TEAtool     \n");
     printf("     (   ) )                   \n");
     printf("      ) ( (        Version:    \n");
-    printf("    _______)_     1.3-stable   \n");
+    printf("    _______)_     1.4-fixed    \n");
     printf(" .-'---------|                 \n");
     printf("( C|/////////|      Author:    \n");
     printf(" '-./////////|   turbocat2001  \n");
