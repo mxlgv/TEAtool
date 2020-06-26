@@ -55,7 +55,7 @@ void xxcrypt_file(char *in_file, char* out_file, char arg)
                 memcpy(temp_block,mini_block,8);
                 TEA_encrypt(temp_block,key);
                 fwrite(temp_block, sizeof(uint32_t),2, output);
-                
+
             }
             fclose(input);
             fclose(output);
@@ -81,8 +81,8 @@ void xxcrypt_file(char *in_file, char* out_file, char arg)
             printf("Data from file: %s successfully DECRYPTED to file: %s\n",in_file,out_file);
             exit(0);
             }
-    }    
-}      
+    }
+}
 
 
 
@@ -131,9 +131,9 @@ void key_con_read(char *str)
             str_to_strkey(str, str_key);
             key[i]=(uint32_t)strtol(str_key[i],NULL,16);
         }
-        
+
     }
-   
+
     else
     {
         printf("Invalid key format!\n");
@@ -149,7 +149,7 @@ void key_file_read(char *key_file)
         printf("File '%s' not found!\n", key_file);
         exit(-1);
     }
-    
+
     if(size_file(keyfile)==16)
     {
     fread(key,sizeof(uint32_t),4, keyfile);
@@ -159,7 +159,7 @@ void key_file_read(char *key_file)
         printf("Invalid key format!\n");
         exit(-1);
     }
-    
+
     fclose(keyfile);
 }
 
@@ -213,7 +213,7 @@ void key_write_in_file(char *keyfilename)
         printf("Error! Incorrect file:'%s'\n", keyfilename);
         exit(-1);
     }
-    fwrite(key,sizeof(uint8_t), 16, keyfile);   
+    fwrite(key,sizeof(uint8_t), 16, keyfile);
     printf("The key is recorded in file: %s\n", keyfilename);
     exit(0);
 
@@ -229,17 +229,18 @@ int main(int argc, char **argv)
    else if(argc==2 && !strcmp(argv[1],"-a"))
    {
     puts("\n");
-    printf("      )  (         TEAtool     \n");
-    printf("     (   ) )                   \n");
-    printf("      ) ( (        Version:    \n");
-    printf("    _______)_      1.5-beta    \n");
-    printf(" .-'---------|                 \n");
-    printf("( C|/////////|      Author:    \n");
-    printf(" '-./////////|   turbocat2001  \n");
+      puts("----------- TEAtool -----------\n");
+    printf("      )  (        Version:     \n");
+    printf("     (   ) )     1.5-stable    \n");
+    printf("      ) ( (                    \n");
+    printf("    _______)_     Author:     \n");
+    printf(" .-'---------|  turbocat2001   \n");
+    printf("( C|/////////|                 \n");
+    printf(" '-./////////| Tester: rgimad  \n");
     printf("   '_________'                 \n");
-    printf("   '-------''   License: GPLv3 \n");
-    printf("          Powered by:           \n");
-    printf("  Tiny Encryption Algorithm.  \n\n");
+    printf("   '-------''  License: GPLv3  \n\n");
+    printf("          Powered by:          \n");
+    printf("  Tiny Encryption Algorithm. \n\n");
        exit(0);
    }
 
