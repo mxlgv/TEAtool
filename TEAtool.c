@@ -123,8 +123,7 @@ int valid_key(char *str)
 void key_con_read(char *str)
 {
     char str_key[4][9];
-    if(valid_key(str))
-
+    if(valid_key(str)&&(strlen(str)==32))
     {
         for(int i=0; i<4; i++)
         {
@@ -215,6 +214,7 @@ void key_write_in_file(char *keyfilename)
     }
     fwrite(key,sizeof(uint8_t), 16, keyfile);
     printf("The key is recorded in file: %s\n", keyfilename);
+    fclose(keyfile);
     exit(0);
 
 }
@@ -231,7 +231,7 @@ int main(int argc, char **argv)
     puts("\n");
       puts("----------- TEAtool -----------\n");
     printf("      )  (        Version:     \n");
-    printf("     (   ) )     1.5-stable    \n");
+    printf("     (   ) )     1.6-stable    \n");
     printf("      ) ( (                    \n");
     printf("    _______)_     Author:     \n");
     printf(" .-'---------|  turbocat2001   \n");

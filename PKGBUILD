@@ -1,5 +1,5 @@
 pkgname=TEAtool
-pkgver=1.5
+pkgver=1.6
 pkgrel=1
 pkgdesc="Tiny algorithm encryption utility"
 url="https://github.com/turbocat2001/TEAtool"
