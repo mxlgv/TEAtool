@@ -10,6 +10,10 @@
     `make`             
     `make install`
         
+**To build a package for Arch Linux, use:**
+
+    `makepkg`
+        
 **Usage example:**
 
     `TEAtool in.file out.file -k FFAB1100C176001F1ADDB8E792001EA5 -e`  
