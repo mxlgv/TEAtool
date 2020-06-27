@@ -1,6 +1,6 @@
 all:
-	gcc src/TEAtool.c -o linux/TEAtool 
+	gcc TEAtool.c -o TEAtool 
 install:
-	install ./linux/TEAtool /usr/bin
+	install ./TEAtool /usr/bin
 uninstall:
 	rm -f /usr/bin/TEAtool
