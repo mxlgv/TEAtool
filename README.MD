@@ -8,7 +8,11 @@
 **To compile under another's OS use "make".**
 
     `make`             
+    
+**Installation / Uninstallation for Linux**
+
     `make install`
+    `make uninstall`
         
 **To build a package for Arch Linux, use:**
 
