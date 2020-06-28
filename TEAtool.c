@@ -3,7 +3,7 @@
 #include <string.h>
 #include <stdint.h>
 #include <stdlib.h>
-
+#include <malloc.h>
 
 #define ENCRYPT 1
 #define DECRYPT 2
@@ -30,7 +30,67 @@ long size_file(FILE* file)
 
 }
 
-void xxcrypt_file(char *in_file, char* out_file, char arg)
+
+void xcrypt_file_speed(char *in_file, char* out_file, char arg)
+{
+    uint32_t temp_block[2];
+    FILE *input, *output;
+    output = fopen(out_file,"wb");
+    if((input = fopen(in_file,"rb"))==NULL)
+    {
+        printf("File '%s' not found\n!", in_file);
+        exit(1);
+    }
+    else
+    {
+        uint32_t *buff;
+        long size_f=size_file(input);
+        buff=malloc(size_f);
+        if(!buff)
+        {
+            puts("To big file, not enough memory! Use normal mode.");
+            exit(-1);
+        }
+        if(arg==ENCRYPT){
+            fread(buff, 1,size_f, input);
+                long i=0;
+                while(i<(size_f/4))
+                {
+                    temp_block[0]=buff[i];
+                    temp_block[1]=buff[i+1];
+                    TEA_encrypt(temp_block,key);
+                    buff[i]=temp_block[0];
+                    buff[i+1]=temp_block[1];
+                    i=i+2;
+                }    
+            fwrite(buff,1,size_f, output);
+            fclose(input);
+            fclose(output);
+            printf("Data from file: %s successfully ENCRYPTED to file: %s\n",in_file,out_file);
+            exit(0);
+          }
+          else if(arg==DECRYPT){
+            fread(buff,1,size_f, input);
+                long i=0;
+                while(i<(size_f/4))
+                {
+                    temp_block[0]=buff[i];
+                    temp_block[1]=buff[i+1];
+                    TEA_decrypt(temp_block,key);
+                    buff[i]=temp_block[0];
+                    buff[i+1]=temp_block[1];
+                    i=i+2;
+                }    
+            fwrite(buff,1,size_f, output);
+            fclose(input);
+            fclose(output);
+            printf("Data from file: %s successfully DECRYPTED to file: %s\n",in_file,out_file);
+            exit(0);
+        }
+    }
+}
+
+void xcrypt_file(char *in_file, char* out_file, char arg)
 {
     uint32_t temp_block[2];
     FILE *input, *output;
@@ -83,10 +143,6 @@ void xxcrypt_file(char *in_file, char* out_file, char arg)
             }
     }
 }
-
-
-
-
 
 
 void str_to_strkey(char *str, char str_key[4][9])
@@ -166,6 +222,7 @@ void key_file_read(char *key_file)
 void findopt(int argc, char *argv[],char *in_file, char *out_file)
 {
     char found=0;
+    char arg;
     for(int j=3; j<argc; j++)
     {
         if(!strcmp(argv[j],"-k"))
@@ -192,11 +249,19 @@ void findopt(int argc, char *argv[],char *in_file, char *out_file)
     for(int i=3;i<argc; i++){
         if(!strcmp(argv[i],"-e"))
         {
-           xxcrypt_file(in_file, out_file, ENCRYPT);
+           xcrypt_file(in_file, out_file, ENCRYPT);
         }
         if(!strcmp(argv[i],"-d"))
         {
-            xxcrypt_file(in_file, out_file, DECRYPT);
+            xcrypt_file(in_file, out_file, DECRYPT);
+        }
+         if(!strcmp(argv[i],"-es"))
+        {
+           xcrypt_file_speed(in_file, out_file, ENCRYPT);
+        }
+        if(!strcmp(argv[i],"-ds"))
+        {
+            xcrypt_file_speed(in_file, out_file, DECRYPT);
         }
 
     }
@@ -246,7 +311,19 @@ int main(int argc, char **argv)
 
    else if(argc==2 && !strcmp(argv[1],"-h"))
    {
-       printf("Usage: \nTEAtool [infile] [outfile] [arguments]\n\nArguments: \n -e  Encrypt file\n -d  Decrypt file\n -k [key]  128bit-key in hex format\n -K [keyfile]  Use key from file\n -r [key] [keyfile].key  Key entry to key file\n -h  This reference\n -a  About the program \n");
+       puts("Usage: \nTEAtool [infile] [outfile] [arguments]\n");
+       puts("Arguments:"); 
+       puts("-e Encrypt file in normal mode");  
+       puts("-d Decrypt file in normal mode"); 
+       puts("-k [key]  128bit-key in hex format"); 
+       puts("-K [keyfile]  Use key from file"); 
+       puts("-r [key] [keyfile].key  Key entry to key file");
+       puts("-h  This reference"); 
+       puts("-a  About the program \n");
+       puts("Experimental modes:");
+       puts("-es Encrypt file in speed mode. File is entirely loaded into RAM");  
+       puts("-ds Decrypt file in speed mode. File is entirely loaded into RAM"); 
+
        exit(0);
    }
 
