@@ -296,7 +296,7 @@ int main(int argc, char **argv)
     puts("\n");
       puts("----------- TEAtool -----------\n");
     printf("      )  (        Version:     \n");
-    printf("     (   ) )     1.6-stable    \n");
+    printf("     (   ) )      1.7-exp      \n");
     printf("      ) ( (                    \n");
     printf("    _______)_     Author:     \n");
     printf(" .-'---------|  turbocat2001   \n");
@@ -318,12 +318,11 @@ int main(int argc, char **argv)
        puts("-k [key]  128bit-key in hex format"); 
        puts("-K [keyfile]  Use key from file"); 
        puts("-r [key] [keyfile].key  Key entry to key file");
-       puts("-h  This reference"); 
-       puts("-a  About the program \n");
+       puts("-h This reference"); 
+       puts("-a About the program \n");
        puts("Experimental modes:");
        puts("-es Encrypt file in speed mode. File is entirely loaded into RAM");  
        puts("-ds Decrypt file in speed mode. File is entirely loaded into RAM"); 
-
        exit(0);
    }
 
