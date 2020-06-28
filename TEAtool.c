@@ -3,7 +3,7 @@
 #include <string.h>
 #include <stdint.h>
 #include <stdlib.h>
-#include <malloc.h>
+//#include <malloc.h>
 
 #define ENCRYPT 1
 #define DECRYPT 2
