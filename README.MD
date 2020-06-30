@@ -3,12 +3,24 @@
 
 **To compile under Kolibri OS, use TCC.**
 
+*English version:*
+
     `tcc TEAtool.c -o TEAtool -lck`
+
+*Russian version:*
+
+    `tcc TEAtool.c -o TEAtool -lck -D RUS`
         
 **To compile under another's OS use "make".**
 
-    `make`             
+*English version:*
+
+    `make`
     
+*Russian version:*
+
+    `make rus`  
+                
 **Installation / Uninstallation for Linux**
 
     `make install`
@@ -20,8 +32,8 @@
         
 **Usage example:**
 
-    `TEAtool in.file out.file -k FFAB1100C176001F1ADDB8E792001EA5 -e`  
-    `TEAtool in.file out.file -K my.key -e`
+    `TEAtool in.file out.file -k FFAB1100C176001F1ADDB8E792001EA5 -e normal`  
+    `TEAtool in.file out.file -K my.key -e speed`
     `TEAtool -r FFAB1100C176001F1ADDB8E792001EA5 my` 
 
 **Attention! I strongly not recommendend you to use this repository. It contains unstable or experimental versions. Use the latest stable versions on the release stands.**  

@@ -1,9 +1,17 @@
+
 #include <stdio.h>
 #include "tea.h"
 #include <string.h>
 #include <stdint.h>
 #include <stdlib.h>
-//#include <malloc.h>
+
+#ifdef RUS
+    #include "lang_ru.h"
+#else
+    #include "lang_en.h"
+#endif
+
+
 
 #define ENCRYPT 1
 #define DECRYPT 2
@@ -38,7 +46,7 @@ void xcrypt_file_speed(char *in_file, char* out_file, char arg)
     output = fopen(out_file,"wb");
     if((input = fopen(in_file,"rb"))==NULL)
     {
-        printf("File '%s' not found\n!", in_file);
+        printf(FILE_NOT_FOUND, in_file);
         exit(1);
     }
     else
@@ -48,12 +56,14 @@ void xcrypt_file_speed(char *in_file, char* out_file, char arg)
         buff=malloc(size_f);
         if(!buff)
         {
-            puts("To big file, not enough memory! Use normal mode.");
+            puts(MEMORY_ERROR);
             exit(-1);
         }
         if(arg==ENCRYPT){
+            printf(LOAD_IN_RAM,in_file);
             fread(buff, 1,size_f, input);
-                long i=0;
+            printf(FILE_ENCRYPTION); 
+            long i=0;
                 while(i<(size_f/4))
                 {
                     temp_block[0]=buff[i];
@@ -62,16 +72,19 @@ void xcrypt_file_speed(char *in_file, char* out_file, char arg)
                     buff[i]=temp_block[0];
                     buff[i+1]=temp_block[1];
                     i=i+2;
-                }    
+                }
+            printf(RECORD_ENCRYPT_DATA);
             fwrite(buff,1,size_f, output);
             fclose(input);
             fclose(output);
-            printf("Data from file: %s successfully ENCRYPTED to file: %s\n",in_file,out_file);
+            printf(DATA_ENCRYPT,in_file,out_file);
             exit(0);
           }
           else if(arg==DECRYPT){
-            fread(buff,1,size_f, input);
-                long i=0;
+              printf(LOAD_IN_RAM,in_file);
+              fread(buff,1,size_f, input);
+              printf(FILE_DECRYPTION);   
+              long i=0;
                 while(i<(size_f/4))
                 {
                     temp_block[0]=buff[i];
@@ -81,10 +94,11 @@ void xcrypt_file_speed(char *in_file, char* out_file, char arg)
                     buff[i+1]=temp_block[1];
                     i=i+2;
                 }    
+            printf(RECORD_DECRYPT_DATA);
             fwrite(buff,1,size_f, output);
             fclose(input);
             fclose(output);
-            printf("Data from file: %s successfully DECRYPTED to file: %s\n",in_file,out_file);
+            printf(DATA_DECRYPT,in_file,out_file);
             exit(0);
         }
     }
@@ -97,14 +111,16 @@ void xcrypt_file(char *in_file, char* out_file, char arg)
     output = fopen(out_file,"wb");
     if((input = fopen(in_file,"rb"))==NULL)
     {
-        printf("File '%s' not found\n!", in_file);
+        printf(FILE_NOT_FOUND, in_file);
         exit(1);
     }
     else
     {
         long size_f=size_file(input);
+        
         if(arg==ENCRYPT){
             uint8_t mini_block[8][1];
+            printf(FILE_ENCRYPTION); 
             while(ftell(output)<size_f)
             {
                 memset(mini_block, 0x00, 8);
@@ -119,12 +135,13 @@ void xcrypt_file(char *in_file, char* out_file, char arg)
             }
             fclose(input);
             fclose(output);
-            printf("Data from file: %s successfully ENCRYPTED to file: %s\n",in_file,out_file);
+            printf(DATA_ENCRYPT,in_file,out_file);
             exit(0);
 
           }
           else if(arg==DECRYPT){
             uint8_t mini_block[8][1];
+            printf(FILE_DECRYPTION); 
             while(ftell(output)<size_f)
             {
                 memset(mini_block, 0x0, 8);
@@ -138,7 +155,7 @@ void xcrypt_file(char *in_file, char* out_file, char arg)
             }
             fclose(input);
             fclose(output);
-            printf("Data from file: %s successfully DECRYPTED to file: %s\n",in_file,out_file);
+            printf(DATA_DECRYPT,in_file,out_file);
             exit(0);
             }
     }
@@ -191,7 +208,7 @@ void key_con_read(char *str)
 
     else
     {
-        printf("Invalid key format!\n");
+        printf(INVALID_KEY_FORMAT);
         exit(-1);
     }
 }
@@ -201,7 +218,7 @@ void key_file_read(char *key_file)
     FILE *keyfile;
     if((keyfile = fopen(key_file,"rb"))==NULL)
     {
-        printf("File '%s' not found!\n", key_file);
+        printf(FILE_NOT_FOUND, key_file);
         exit(-1);
     }
 
@@ -211,7 +228,7 @@ void key_file_read(char *key_file)
     }
     else
     {
-        printf("Invalid key format!\n");
+        printf(INVALID_KEY_FORMAT);
         exit(-1);
     }
 
@@ -222,7 +239,6 @@ void key_file_read(char *key_file)
 void findopt(int argc, char *argv[],char *in_file, char *out_file)
 {
     char found=0;
-    char arg;
     for(int j=3; j<argc; j++)
     {
         if(!strcmp(argv[j],"-k"))
@@ -241,7 +257,7 @@ void findopt(int argc, char *argv[],char *in_file, char *out_file)
 
     if(!found)
     {
-        printf("No key or key file!\n");
+        printf(NO_KEY_OR_KEYFILE);
         exit(-1);
     }
 
@@ -249,23 +265,16 @@ void findopt(int argc, char *argv[],char *in_file, char *out_file)
     for(int i=3;i<argc; i++){
         if(!strcmp(argv[i],"-e"))
         {
-           xcrypt_file(in_file, out_file, ENCRYPT);
+           if(!strcmp(argv[i+1],"normal")){xcrypt_file(in_file, out_file, ENCRYPT);}
+           if(!strcmp(argv[i+1],"speed")){xcrypt_file_speed(in_file, out_file, ENCRYPT);}
         }
         if(!strcmp(argv[i],"-d"))
         {
-            xcrypt_file(in_file, out_file, DECRYPT);
+           if(!strcmp(argv[i+1],"normal")){xcrypt_file(in_file, out_file, DECRYPT);}
+           if(!strcmp(argv[i+1],"speed")){xcrypt_file_speed(in_file, out_file, DECRYPT);}
         }
-         if(!strcmp(argv[i],"-es"))
-        {
-           xcrypt_file_speed(in_file, out_file, ENCRYPT);
-        }
-        if(!strcmp(argv[i],"-ds"))
-        {
-            xcrypt_file_speed(in_file, out_file, DECRYPT);
-        }
-
     }
-    printf("Invalid arguments! Use the help: -h\n");
+    printf(INVALID_ARG);
     exit(0);
 }
 
@@ -274,11 +283,11 @@ void key_write_in_file(char *keyfilename)
     FILE *keyfile;
     if((keyfile = fopen(strcat(keyfilename, ".key"), "wb"))==NULL)
     {
-        printf("Error! Incorrect file:'%s'\n", keyfilename);
+        printf(INCORRECT_FILE, keyfilename);
         exit(-1);
     }
     fwrite(key,sizeof(uint8_t), 16, keyfile);
-    printf("The key is recorded in file: %s\n", keyfilename);
+    printf(KEY_RECORD_IN_FILE, keyfilename);
     fclose(keyfile);
     exit(0);
 
@@ -287,42 +296,19 @@ void key_write_in_file(char *keyfilename)
 
 int main(int argc, char **argv)
 {
-   if(argc==6)
+   if(argc==7)
    {
          findopt(argc,argv, argv[1],argv[2]);
    }
    else if(argc==2 && !strcmp(argv[1],"-a"))
    {
-    puts("\n");
-      puts("----------- TEAtool -----------\n");
-    printf("      )  (        Version:     \n");
-    printf("     (   ) )      1.7-exp      \n");
-    printf("      ) ( (                    \n");
-    printf("    _______)_     Author:     \n");
-    printf(" .-'---------|  turbocat2001   \n");
-    printf("( C|/////////|                 \n");
-    printf(" '-./////////| Tester: rgimad  \n");
-    printf("   '_________'                 \n");
-    printf("   '-------''  License: GPLv3  \n\n");
-    printf("          Powered by:          \n");
-    printf("  Tiny Encryption Algorithm. \n\n");
+       show_about();
        exit(0);
    }
 
    else if(argc==2 && !strcmp(argv[1],"-h"))
    {
-       puts("Usage: \nTEAtool [infile] [outfile] [arguments]\n");
-       puts("Arguments:"); 
-       puts("-e Encrypt file in normal mode");  
-       puts("-d Decrypt file in normal mode"); 
-       puts("-k [key]  128bit-key in hex format"); 
-       puts("-K [keyfile]  Use key from file"); 
-       puts("-r [key] [keyfile].key  Key entry to key file");
-       puts("-h This reference"); 
-       puts("-a About the program \n");
-       puts("Experimental modes:");
-       puts("-es Encrypt file in speed mode. File is entirely loaded into RAM");  
-       puts("-ds Decrypt file in speed mode. File is entirely loaded into RAM"); 
+       show_help();
        exit(0);
    }
 
@@ -335,7 +321,7 @@ int main(int argc, char **argv)
 
    else
    {
-       printf("Invalid arguments! Use the help: -h!\n");
+       printf(INVALID_ARG);
        exit(0);
    }
 
