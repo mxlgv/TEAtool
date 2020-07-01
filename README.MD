@@ -3,15 +3,9 @@
 
 **To compile under Kolibri OS, use TCC.**
 
-*English version:*
-
     `tcc TEAtool.c -o TEAtool -lck`
 
-*Russian version:*
-
-    `tcc TEAtool.c -o TEAtool -lck -D RUS`
-        
-**To compile under another's OS use "make".**
+**To compile under Linux, use "make".**
 
 *English version:*
 
