@@ -6,9 +6,9 @@
 #include <stdlib.h>
 
 #ifdef RUS
-    #include "lang_ru.h"
+    #include "lang_ru.c"
 #else
-    #include "lang_en.h"
+    #include "lang_en.c"
 #endif
 
 

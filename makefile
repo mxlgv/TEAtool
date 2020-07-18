@@ -1,7 +1,8 @@
+DIR='/usr/bin'
 all:
 	gcc TEAtool.c -o TEAtool 
 install:
-	install ./TEAtool /usr/bin
+	install ./TEAtool $(DIR)
 uninstall:
 	rm -f /usr/bin/TEAtool
 

@@ -7,13 +7,16 @@ license=('GPLv3')
 arch=(x86_64)
 
 
-package() {
-    cd ..
+
+build(){
+    cd $startdir
     make
-    mkdir -p $srcdir/usr/bin
-    cp TEAtool $srcdir/usr/bin
-    cp -r $srcdir/* $pkgdir/
-    rm TEAtool
-    rm -rf src
-  
 }
+
+package() {
+    cd $startdir
+    mkdir -p $pkgdir/usr/bin
+    make install DIR=$pkgdir/usr/bin
+}
+
+
