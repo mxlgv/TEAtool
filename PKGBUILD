@@ -9,8 +9,23 @@ arch=(x86_64)
 
 
 build(){
-    cd $startdir
-    make
+   cd $startdir
+   while true
+        do
+        echo "Select language: 1) English 2) Russian"
+        read lang 
+        if [ $lang == "1" ]
+        then 
+            echo "English selected!"
+            make 
+            break
+        elif [ $lang == "2" ]
+        then 
+            echo "Russian selected!"
+            make rus 
+            break
+        fi
+    done
 }
 
 package() {
