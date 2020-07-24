@@ -3,7 +3,7 @@
 
 **To compile under Kolibri OS, use TCC.**
 
-    `tcc TEAtool.c -o TEAtool -lck`
+    `tcc TEAtool.c -o teatool -lck`
 
 **To compile under Linux, use "make".**
 
@@ -22,12 +22,12 @@
         
 **Installation package for ArchLinux(AUR):**
     
-    `yay -S teatool`
+    `yay -S teatool-git`
     
 **Usage example:**
 
-    `TEAtool in.file out.file -k FFAB1100C176001F1ADDB8E792001EA5 -e normal`  
-    `TEAtool in.file out.file -K my.key -e speed`
-    `TEAtool -r FFAB1100C176001F1ADDB8E792001EA5 my` 
+    `teatool in.file out.file -k FFAB1100C176001F1ADDB8E792001EA5 -e normal`  
+    `teatool in.file out.file -K my.key -e speed`
+    `teatool -r FFAB1100C176001F1ADDB8E792001EA5 my` 
 
  

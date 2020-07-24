@@ -1,10 +1,10 @@
 DIR='/usr/bin'
 all:
-	gcc TEAtool.c -o TEAtool 
+	gcc TEAtool.c -o teatool 
 install:
-	install ./TEAtool $(DIR)
+	install ./teatool $(DIR)
 uninstall:
-	rm -f /usr/bin/TEAtool
+	rm -f /usr/bin/teatool
 
 rus:
-	gcc TEAtool.c -o TEAtool -D RUS
+	gcc TEAtool.c -o teatool -D RUS

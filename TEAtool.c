@@ -131,7 +131,6 @@ void xcrypt_file(char *in_file, char* out_file, char arg)
                 memcpy(temp_block,mini_block,8);
                 TEA_encrypt(temp_block,key);
                 fwrite(temp_block, sizeof(uint32_t),2, output);
-
             }
             fclose(input);
             fclose(output);
