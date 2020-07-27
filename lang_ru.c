@@ -1,5 +1,5 @@
 #include <stdio.h>
-#define INVALID_ARG "Неверные аргуметы! Используйте '-h' для спраки.\n"
+#define INVALID_ARG "Неверные аргуметы! Используйте '-h' для справки.\n"
 #define KEY_RECORD_IN_FILE "Ключ записан в файл: %s\n"
 #define INCORRECT_FILE "Ошибка! Некорректный файл:'%s'\n"
 #define NO_KEY_OR_KEYFILE "Отсутствует ключ или файл ключа!\n"
