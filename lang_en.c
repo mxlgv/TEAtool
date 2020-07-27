@@ -34,7 +34,7 @@ void show_about()
     puts("\n");
     puts("-----------TEAtool-ENG-----------\n");
     printf("      )  (        Version:     \n");
-    printf("     (   ) )     1.7-stable    \n");
+    printf("     (   ) )     1.8-stable    \n");
     printf("      ) ( (                    \n");
     printf("    _______)_     Author:      \n");
     printf(" .-'---------|  turbocat2001   \n");

@@ -34,7 +34,7 @@ void show_about()
     puts("\n");
     puts("-----------TEAtool-RUS-----------\n");
     printf("      )  (         Версия:     \n");
-    printf("     (   ) )   1.7-стабильная  \n");
+    printf("     (   ) )   1.8-стабильная  \n");
     printf("      ) ( (                    \n");
     printf("    _______)_      Автор:      \n");
     printf(" .-'---------|  turbocat2001   \n");

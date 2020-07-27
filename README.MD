@@ -3,7 +3,7 @@
 
 **To compile under Kolibri OS, use TCC.**
 
-    `tcc TEAtool.c -o teatool -lck`
+    `tcc teatool.c -o teatool -lck`
 
 **To compile under Linux, use "make".**
 
